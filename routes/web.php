@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+/*Route::get('/', function () {
+    return view('category');
+});*/
+Route::get('/',[CategoryController::class,'index'])->name('index');
+Route::post('/fetch-sub-categories',[CategoryController::class,'fetchSubCategories'])->name('fetch-sub-categories');
+Route::post('/fetch-items',[CategoryController::class,'fetchItems'])->name('fetch-items');
