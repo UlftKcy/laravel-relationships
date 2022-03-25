@@ -98,30 +98,29 @@ class CategoryController extends Controller
      */
     public function fetchSubCategories(Request $request): JsonResponse
     {
-        DB::beginTransaction();
         try {
             $validator = Validator::make($request->all(), [
-                "category" => "required",
+                "category_id" => "required",
             ]);
 
             if ($validator->fails()) {
                 return response()->json(["status" => "warning", "message" => "hata oluştu"]);
             }
+
             /** @var SubCategory $sub_categories */
             $sub_categories = SubCategory::query()
                 ->select("sub_categories.id as id", "sub_categories.name as name")
-                ->join("categories", "categories.id", "=", "sub_categories.category.id")
-                ->where("categories.id", "=", $request->category)
+                ->join("categories", "categories.id", "=", "sub_categories.category_id")
+                ->where("categories.id", "=", $request->category_id)
                 ->get();
 
-            DB::commit();
+
             return \response()->json(["status" => "success", "message" => "İşlem başarıyla tamamlandı.", "data" => [
                 "sub_categories" => $sub_categories
             ]]);
 
         } catch (Exception $exception) {
-            DB::rollback();
-            return response()->json(["status" => "error", "message" => "hata oluştu"]);
+            return response()->json(["status" => "error", "message" => $exception->getMessage()]);
         }
     }
 }
