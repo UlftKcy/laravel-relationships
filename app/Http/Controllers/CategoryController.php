@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Item;
 use App\Models\SubCategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -117,6 +118,39 @@ class CategoryController extends Controller
 
             return \response()->json(["status" => "success", "message" => "İşlem başarıyla tamamlandı.", "data" => [
                 "sub_categories" => $sub_categories
+            ]]);
+
+        } catch (Exception $exception) {
+            return response()->json(["status" => "error", "message" => $exception->getMessage()]);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function fetchItems(Request $request): JsonResponse
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                "sub_category_id" => "required",
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(["status" => "warning", "message" => "hata oluştu"]);
+            }
+
+            /** @var Item $items */
+            $items = Item::query()
+                ->select("items.id as id", "items.name as name")
+                ->join("sub_categories", "sub_categories.id", "=", "items.sub_category_id")
+                ->where("sub_categories.id", "=", $request->sub_category_id)
+                ->get();
+
+
+            return \response()->json(["status" => "success", "message" => "İşlem başarıyla tamamlandı.", "data" => [
+                "items" => $items
             ]]);
 
         } catch (Exception $exception) {

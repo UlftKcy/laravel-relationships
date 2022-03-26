@@ -12,6 +12,7 @@
                 <div class="form-group mb-3">
                     <label for="category">Category</label>
                     <select class="form-control" id="category" name="category">
+                        <option value="" disabled hidden selected></option>
                         @foreach($categories as $category)
                             <option value="{{$category->id}}" data-value="{{$category->id}}">{{$category->name}}</option>
                         @endforeach
@@ -20,13 +21,13 @@
                 <div class="form-group mb-3">
                     <label for="sub_category">Sub-Category</label>
                     <select class="form-control" id="sub_category" name="sub_category">
-                        <option value=""></option>
+                        <option value="" disabled hidden selected></option>
                     </select>
                 </div>
                 <div class="form-group mb-3">
                     <label for="item">Items</label>
                     <select class="form-control" id="item" name="item">
-                        <option value=""></option>
+                        <option value="" disabled hidden selected></option>
                     </select>
                 </div>
             </div>
